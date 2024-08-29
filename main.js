@@ -6,8 +6,8 @@ const projects = [
             { name: "tag1", value: "Tag1" },
             { name: "tag2", value: "Tag2" },
             { name: "tag3", value: "Tag3" }
-        ]
-
+        ],
+        difficulty: 1
     },
     {
         title: "Title2",
@@ -16,7 +16,8 @@ const projects = [
             { name: "tag4", value: "Tag4" },
             { name: "tag5", value: "Tag5" },
             { name: "tag6", value: "Tag6" }
-        ]
+        ],
+        difficulty: 1
     },
     {
         title: "Title3",
@@ -25,7 +26,8 @@ const projects = [
             { name: "tag7", value: "Tag7" },
             { name: "tag8", value: "Tag8" },
             { name: "tag9", value: "Tag9" }
-        ]
+        ],
+        difficulty: 1
     },
     {
         title: "Title4",
@@ -34,7 +36,8 @@ const projects = [
             { name: "tag10", value: "Tag10" },
             { name: "tag11", value: "Tag11" },
             { name: "tag12", value: "Tag12" }
-        ]
+        ],
+        difficulty: 1
     },
     {
         title: "Title5",
@@ -43,7 +46,8 @@ const projects = [
             { name: "tag13", value: "Tag13" },
             { name: "tag14", value: "Tag14" },
             { name: "tag15", value: "Tag15" }
-        ]
+        ],
+        difficulty: 1
     },
     {
         title: "Title6",
@@ -52,7 +56,8 @@ const projects = [
             { name: "tag16", value: "Tag16" },
             { name: "tag17", value: "Tag17" },
             { name: "tag18", value: "Tag18" }
-        ]
+        ],
+        difficulty: 1
     },
 ];
 
@@ -76,6 +81,10 @@ function createProjectElement(project) {
     var projectContentElement = document.createElement("div");
     projectContentElement.classList.add("project-content");
 
+    var projectDifficultyElement = document.createElement("div");
+    projectDifficultyElement.classList.add("project-difficulty");
+    projectDifficultyElement.append("Difficulty: " + project["difficulty"] + "/5");
+
     var projectTitleElement = document.createElement("div");
     projectTitleElement.classList.add("project-title");
     projectTitleElement.append(project["title"]);
@@ -84,6 +93,7 @@ function createProjectElement(project) {
     projectDescriptionElement.classList.add("project-description");
     projectDescriptionElement.append(project["description"]);
 
+    projectContentElement.append(projectDifficultyElement);
     projectContentElement.append(projectTitleElement);
     projectContentElement.append(projectDescriptionElement);
 
