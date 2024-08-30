@@ -1,14 +1,12 @@
 const projects = [
     {
-        title: "Title1",
-        description: "Ut eget facilisis leo, vel finibus risus. Fusce in fringilla \
-                enim. In tempor ut nulla eu posuere. Aliquam non ligula arcu. \
-                Maecenas efficitur nisl magna, non maximus odio malesuada at. In \
-                hac habitasse platea dictumst. Cras at maximus orci.",
+        title: "Budget Calculator and Analyzer",
+        description: "Utilizing  Spring Boot and JPA frameworks to create a web application with data \
+        persistence for users, accounts, transactions, categories, as well as authentication.",
         tags: [
             "Java",
-            "C#",
-            "Tag3"
+            "Spring Boot",
+            "JPA"
         ],
         difficulty: 4,
         startMonth: 3,
@@ -24,65 +22,69 @@ const projects = [
             "Java",
         ],
         difficulty: 2,
-        startMonth: 2,
-        startYear: 2024,
+        startMonth: 5,
+        startYear: 2023,
         isCompleted: true
     },
+    // {
+    //     title: "Title3",
+    //     description: "Aliquam non ligula arcu. \
+    //             Maecenas efficitur nisl magna, non maximus odio malesuada at. In \
+    //             hac habitasse platea dictumst. Cras at maximus orci.",
+    //     tags: [
+    //         "C",
+    //         "Tag8",
+    //         "Tag9"
+    //     ],
+    //     difficulty: 4,
+    //     startMonth: 1,
+    //     startYear: 2024,
+    //     isCompleted: false
+    // },
     {
-        title: "Title3",
-        description: "Aliquam non ligula arcu. \
-                Maecenas efficitur nisl magna, non maximus odio malesuada at. In \
-                hac habitasse platea dictumst. Cras at maximus orci.",
+        title: "This Website!",
+        description: "Creating this website was a great opportunity to demonstrate a skill that I have not\
+        worked on in some time. Using HTML, CSS, and vanilla JavaScript I was able to display more information about \
+        myself in the form of a portfilio website.",
+        tags: [
+            "HTML",
+            "CSS",
+            "JavaScript"
+        ],
+        difficulty: 1,
+        startMonth: 8,
+        startYear: 2024,
+        isCompleted: false
+    },
+    {
+        title: "C Squared Programming Language",
+        description: "Utilized lexical and syntactical analysis to create the front end of a \
+        custom compiler in C#. Designed a recursive descent parser using a custom context-free \
+        grammar for C code generation.",
         tags: [
             "C",
-            "Tag8",
-            "Tag9"
+            "C#"
         ],
         difficulty: 4,
         startMonth: 1,
         startYear: 2024,
         isCompleted: false
     },
-    {
-        title: "Title4",
-        description: "Description4",
-        tags: [
-            "Tag10",
-            "Tag11",
-            "Tag12"
-        ],
-        difficulty: 1,
-        startMonth: 5,
-        startYear: 2024,
-        isCompleted: false
-    },
-    {
-        title: "C Squared Programming Language",
-        description: "Description5",
-        tags: [
-            "C",
-            "C#"
-        ],
-        difficulty: 5,
-        startMonth: 4,
-        startYear: 2024,
-        isCompleted: false
-    },
-    {
-        title: "Title6",
-        description: "In tempor ut nulla eu posuere. Aliquam non ligula arcu. \
-                Maecenas efficitur nisl magna, non maximus odio malesuada at. In \
-                hac habitasse platea dictumst. Cras at maximus orci.",
-        tags: [
-            "Tag16",
-            "Tag17",
-            "Tag18"
-        ],
-        difficulty: 5,
-        startMonth: 6,
-        startYear: 2024,
-        isCompleted: true
-    },
+    // {
+    //     title: "Title6",
+    //     description: "In tempor ut nulla eu posuere. Aliquam non ligula arcu. \
+    //             Maecenas efficitur nisl magna, non maximus odio malesuada at. In \
+    //             hac habitasse platea dictumst. Cras at maximus orci.",
+    //     tags: [
+    //         "Tag16",
+    //         "Tag17",
+    //         "Tag18"
+    //     ],
+    //     difficulty: 5,
+    //     startMonth: 6,
+    //     startYear: 2024,
+    //     isCompleted: true
+    // },
 ];
 
 const sortParameters = [ 
@@ -190,11 +192,10 @@ function getProjects() {
     switch (currentSort) {
         case "Date":
             result.sort((a, b) => {
-                if (a.startMonth > b.startMonth) { return 1; }           
-                if (a.startMonth < b.startMonth) { return -1; }
-        
                 if (a.startYear > b.startYear) { return -1; }
                 if (a.startYear < b.startYear) { return 1; }
+                if (a.startMonth > b.startMonth) { return -1; }           
+                if (a.startMonth < b.startMonth) { return 1; }
             })
             break;
         case "Title":
