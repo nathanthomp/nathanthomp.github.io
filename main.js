@@ -11,7 +11,7 @@ const projects = [
             "Tag3"
         ],
         difficulty: 4,
-        startMonth: 1,
+        startMonth: 3,
         startYear: 2024,
         isCompleted: false
     },
@@ -39,7 +39,7 @@ const projects = [
             "Tag9"
         ],
         difficulty: 4,
-        startMonth: 3,
+        startMonth: 1,
         startYear: 2024,
         isCompleted: false
     },
@@ -52,7 +52,7 @@ const projects = [
             "Tag12"
         ],
         difficulty: 1,
-        startMonth: 4,
+        startMonth: 5,
         startYear: 2024,
         isCompleted: false
     },
@@ -65,7 +65,7 @@ const projects = [
             "Tag15"
         ],
         difficulty: 2,
-        startMonth: 5,
+        startMonth: 4,
         startYear: 2024,
         isCompleted: true
     },
@@ -92,7 +92,20 @@ const sortParameters = [
     "Difficulty"
 ]
 
+const tags = getUniqueTags();
 
+function getUniqueTags() {
+    var result = [];
+    for (var i = 0; i < projects.length; i++) {
+        for (var j = 0; j < projects[i].tags.length; j++) {
+            var tag = projects[i].tags[j];
+            if (!result.includes(tag)) {
+                result.push(tag);
+            }
+        }
+    }
+    return result;
+}
 
 window.onload = function() {
     loadSort();
@@ -101,82 +114,6 @@ window.onload = function() {
     var projectsToLoad = sortProjectsByStart();
     loadProjects(projectsToLoad);
 }
-
-function loadProjects(projectsToLoad) {
-    var projectsElement = document.getElementById("projects");
-    
-    for (var i = 0; i < projectsToLoad.length; i++) {
-        var projectElement = createProjectElement(projectsToLoad[i]);
-        projectsElement.append(projectElement);
-    }
-}
-
-function createProjectElement(project) {
-    var projectElement = document.createElement("li");
-    projectElement.classList.add("project");
-
-    var projectContentElement = document.createElement("div");
-    projectContentElement.classList.add("project-content");
-
-    var projectDifficultyElement = document.createElement("div");
-    projectDifficultyElement.classList.add("project-difficulty");
-    projectDifficultyElement.append("Difficulty: " + project.difficulty + "/5");
-
-    var projectTitleElement = document.createElement("div");
-    projectTitleElement.classList.add("project-title");
-    projectTitleElement.append(project.title);
-
-    var projectDescriptionElement = document.createElement("div");
-    projectDescriptionElement.classList.add("project-description");
-    projectDescriptionElement.append(project.description);
-
-    var projectStartElement = document.createElement("div");
-    projectStartElement.classList.add("project-start");
-    projectStartElement.append("Started " + getMonthByNumber(project.startMonth) + ", " + project.startYear); 
-
-    var projectStatusElement = document.createElement("div");
-    projectStatusElement.classList.add("project-status");
-    if (project.isCompleted) {
-        projectStatusElement.append("Completed"); 
-    } else {
-        projectStatusElement.append("In Progress");
-    }
-
-    var projectTagsElement = document.createElement("ul");
-    projectTagsElement.classList.add("project-tags");
-
-    for (var i = 0; i < project.tags.length; i++) {
-        var projectTagElement = document.createElement("li");
-        projectTagElement.classList.add("project-tag");
-        projectTagElement.append(project.tags[i]);
-
-        // Add tag to set of tags for sorting
-
-        projectTagsElement.append(projectTagElement);
-    }
-
-    projectContentElement.append(projectDifficultyElement);
-    projectContentElement.append(projectTitleElement);
-    projectContentElement.append(projectDescriptionElement);
-    projectContentElement.append(projectStartElement);
-    projectContentElement.append(projectStatusElement);
-    projectContentElement.append(projectTagsElement);
-
-    projectElement.append(projectContentElement);
-
-    return projectElement;
-}
-
-function unloadProjects() {
-    var projectsElement = document.getElementById("projects");
-    while (projectsElement.firstChild) {
-        projectsElement.removeChild(projectsElement.firstChild);
-    }
-}
-
-// Sort Members
-
-
 
 function loadSort() {
     var sortLabelElement = document.createElement("label");
@@ -203,7 +140,6 @@ function loadSort() {
             return;
         }
 
-        unloadProjects();
         var projectsToLoad = [];
         switch (selected) {
             case "Date":
@@ -219,28 +155,103 @@ function loadSort() {
                 break;
         }
 
-        loadProjects(projectsToLoad);
+        refreshProjects(projectsToLoad);
     };
 }
+
+function loadFilter() {
+
+}
+
+function loadProjects(projectsToLoad) {
+    var projectsElement = document.getElementById("projects");
+    
+    for (var i = 0; i < projectsToLoad.length; i++) {
+        var project = projectsToLoad[i];
+
+        // Project
+        var projectElement = document.createElement("li");
+        projectElement.classList.add("project");
+
+        // Project content
+        var projectContentElement = document.createElement("div");
+        projectContentElement.classList.add("project-content");
+        projectElement.append(projectContentElement);
+
+        // Project difficulty
+        var projectDifficultyElement = document.createElement("div");
+        projectDifficultyElement.classList.add("project-difficulty");
+        projectDifficultyElement.append("Difficulty: " + project.difficulty + "/5");
+        projectContentElement.append(projectDifficultyElement);
+
+        // Project title
+        var projectTitleElement = document.createElement("div");
+        projectTitleElement.classList.add("project-title");
+        projectTitleElement.append(project.title);
+        projectContentElement.append(projectTitleElement);
+
+        // Project description
+        var projectDescriptionElement = document.createElement("div");
+        projectDescriptionElement.classList.add("project-description");
+        projectDescriptionElement.append(project.description);
+        projectContentElement.append(projectDescriptionElement);
+
+        // Project start
+        var projectStartElement = document.createElement("div");
+        projectStartElement.classList.add("project-start");
+        projectStartElement.append("Started " + getMonthByNumber(project.startMonth) + ", " + project.startYear); 
+        projectContentElement.append(projectStartElement);
+
+        // Project status
+        var projectStatusElement = document.createElement("div");
+        projectStatusElement.classList.add("project-status");
+        if (project.isCompleted) {
+            projectStatusElement.append("Completed"); 
+        } else {
+            projectStatusElement.append("In Progress");
+        }
+        projectContentElement.append(projectStatusElement);
+
+        var projectTagsElement = document.createElement("ul");
+        projectTagsElement.classList.add("project-tags");
+        for (var j = 0; j < project.tags.length; j++) {
+            var projectTagElement = document.createElement("li");
+            projectTagElement.classList.add("project-tag");
+            projectTagElement.append(project.tags[j]);
+    
+            // Add tag to set of tags for sorting
+    
+            projectTagsElement.append(projectTagElement);
+        }
+        projectContentElement.append(projectTagsElement);
+
+        projectsElement.append(projectElement);
+    }
+}
+
+function refreshProjects(projectsToLoad) {
+    var projectsElement = document.getElementById("projects");
+    while (projectsElement.firstChild) {
+        projectsElement.removeChild(projectsElement.firstChild);
+    }
+
+    loadProjects(projectsToLoad);
+}
+
+// Sort Members
+
+
+
+
 
 function sortProjectsByStart() {
     var projectsCopy = [...projects];
     projectsCopy.sort((a, b) => {
-        if (a.startMonth > b.startMonth) {
-            return 1;
-        }           
-        
-        if (a.startMonth < b.startMonth) {
-            return -1;
-        }
+        if (a.startMonth > b.startMonth) { return 1; }           
+        if (a.startMonth < b.startMonth) { return -1; }
 
-        if (a.startYear > b.startYear) {
-            return -1;
-        }
-
-        if (a.startYear < b.startYear) {
-            return 1;
-        }
+        if (a.startYear > b.startYear) { return -1; }
+        if (a.startYear < b.startYear) { return 1; }
     })
 
     return projectsCopy;
@@ -260,24 +271,11 @@ function sortProjectsByDifficulty() {
 
 // Filter Members
 
-const tags = getUniqueTags();
 
-function loadFilter() {
 
-}
 
-function getUniqueTags() {
-    var result = [];
-    for (var i = 0; i < projects.length; i++) {
-        for (var j = 0; j < projects[i].tags.length; j++) {
-            var tag = projects[i].tags[j];
-            if (!result.includes(tag)) {
-                result.push(tag);
-            }
-        }
-    }
-    return result;
-}
+
+
 
 // Utility Members
 
