@@ -9,6 +9,12 @@ body {
     margin-bottom: 5px;
 }
 
+#title-sub {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
 #nav {
     list-style-type: none;
     display: flex;
@@ -39,6 +45,7 @@ body {
 .project {
     list-style-type: none;
     width: 300px;
+    height: 400px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     border-radius: 4px;
 }
@@ -48,13 +55,12 @@ body {
 }
 
 .project-difficulty {
-    padding-bottom: 10px;
+    margin-bottom: 10px;
     text-align: right;
 }
 
 .project-content {
     padding: 16px;
-    padding-bottom: 30px;
 }
 
 .project-title {
@@ -62,8 +68,16 @@ body {
 }
 
 .project-description {
-    padding-top: 5px;
+    margin-top: 5px;
+    margin-bottom: 30px;
+}
 
+.project-start {
+    text-align: right;
+}
+
+.project-status {
+    text-align: right;
 }
 
 .project-tags {
@@ -71,7 +85,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     align-content: baseline;
-    padding: 10px;
+    padding-top: 16px;
     justify-content: right;
 }
 
