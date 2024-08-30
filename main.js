@@ -6,8 +6,8 @@ const projects = [
                 Maecenas efficitur nisl magna, non maximus odio malesuada at. In \
                 hac habitasse platea dictumst. Cras at maximus orci.",
         tags: [
-            "Tag1",
-            "Tag2",
+            "Java",
+            "C#",
             "Tag3"
         ],
         difficulty: 4,
@@ -16,14 +16,14 @@ const projects = [
         isCompleted: false
     },
     {
-        title: "Title2",
-        description: "Description2",
+        title: "Nit Version Control",
+        description: "This project consisted of creating a framework in Java for a custom version control \
+        system using a directed acyclic graph to manage the changes and merges to the mock repository."
+        ,
         tags: [
-            "Tag4",
-            "Tag5",
-            "Tag6"
+            "Java",
         ],
-        difficulty: 1,
+        difficulty: 2,
         startMonth: 2,
         startYear: 2024,
         isCompleted: true
@@ -34,7 +34,7 @@ const projects = [
                 Maecenas efficitur nisl magna, non maximus odio malesuada at. In \
                 hac habitasse platea dictumst. Cras at maximus orci.",
         tags: [
-            "Tag7",
+            "C",
             "Tag8",
             "Tag9"
         ],
@@ -57,17 +57,16 @@ const projects = [
         isCompleted: false
     },
     {
-        title: "Title5",
+        title: "C Squared Programming Language",
         description: "Description5",
         tags: [
-            "Tag13",
-            "Tag14",
-            "Tag15"
+            "C",
+            "C#"
         ],
-        difficulty: 2,
+        difficulty: 5,
         startMonth: 4,
         startYear: 2024,
-        isCompleted: true
+        isCompleted: false
     },
     {
         title: "Title6",
@@ -94,8 +93,17 @@ const sortParameters = [
 
 const tags = getUniqueTags();
 
+var currentSort;
+var currentFilter;
+
+window.onload = function() {
+    loadSort();
+    loadFilter();
+    refreshProjects();
+}
+
 function getUniqueTags() {
-    var result = [];
+    var result = [ "All" ];
     for (var i = 0; i < projects.length; i++) {
         for (var j = 0; j < projects[i].tags.length; j++) {
             var tag = projects[i].tags[j];
@@ -105,14 +113,6 @@ function getUniqueTags() {
         }
     }
     return result;
-}
-
-window.onload = function() {
-    loadSort();
-    loadFilter();
-
-    var projectsToLoad = sortProjectsByStart();
-    loadProjects(projectsToLoad);
 }
 
 function loadSort() {
@@ -133,34 +133,81 @@ function loadSort() {
     sortElement.append(sortLabelElement);
     sortElement.append(sortSelectElement);
 
+    currentSort = sortSelectElement.value;
+
     sortSelectElement.onchange = function() {
-
-        var selected = sortSelectElement.value;
-        if (!sortParameters.includes(selected)) {
-            return;
-        }
-
-        var projectsToLoad = [];
-        switch (selected) {
-            case "Date":
-                projectsToLoad = sortProjectsByStart();
-                break;
-            case "Title":
-                projectsToLoad = sortProjectsByTitle();
-                break;
-            case "Difficulty":
-                projectsToLoad = sortProjectsByDifficulty();
-                break;
-            default:
-                break;
-        }
-
-        refreshProjects(projectsToLoad);
-    };
+        currentSort = sortSelectElement.value;
+        refreshProjects();
+    }
 }
 
 function loadFilter() {
+    var filterLabelElement = document.createElement("label");
+    filterLabelElement.setAttribute("for", "filterParameters");
+    filterLabelElement.append("Filter");
 
+    var filterSelectElement = document.createElement("select");
+    filterSelectElement.setAttribute("id", "filterParameters");
+
+    for (var i = 0; i < tags.length; i++) {
+        optionElement = document.createElement("option");
+
+        // checkboxInputElement = document.createElement("input");
+        // checkboxInputElement.setAttribute("type", "checkbox");
+        // checkboxInputElement.append();
+
+        optionElement.append(tags[i]);
+        filterSelectElement.append(optionElement);
+    }
+
+    var filterElement = document.getElementById("filter");
+    filterElement.append(filterLabelElement);
+    filterElement.append(filterSelectElement);
+
+    currentFilter = filterSelectElement.value;
+
+    filterSelectElement.onchange = function() {
+        currentFilter = filterSelectElement.value;
+        refreshProjects();
+    }
+}
+
+function getProjects() {
+    if (!tags.includes(currentFilter)) {
+        return;
+    }
+
+    if (!sortParameters.includes(currentSort)) {
+        return;
+    }
+
+    var result = [...projects];
+    
+    if (!(currentFilter === "All")) {
+        result = projects.filter(project => project.tags.includes(currentFilter) === true);
+    }
+
+    switch (currentSort) {
+        case "Date":
+            result.sort((a, b) => {
+                if (a.startMonth > b.startMonth) { return 1; }           
+                if (a.startMonth < b.startMonth) { return -1; }
+        
+                if (a.startYear > b.startYear) { return -1; }
+                if (a.startYear < b.startYear) { return 1; }
+            })
+            break;
+        case "Title":
+            result.sort((a, b) => a.title.localeCompare(b.title))
+            break;
+        case "Difficulty":
+            result.sort((a, b) => b.difficulty - a.difficulty)
+            break;
+        default:
+            break;
+    }
+
+    return result;
 }
 
 function loadProjects(projectsToLoad) {
@@ -212,6 +259,7 @@ function loadProjects(projectsToLoad) {
         }
         projectContentElement.append(projectStatusElement);
 
+        // Project tags
         var projectTagsElement = document.createElement("ul");
         projectTagsElement.classList.add("project-tags");
         for (var j = 0; j < project.tags.length; j++) {
@@ -229,55 +277,17 @@ function loadProjects(projectsToLoad) {
     }
 }
 
-function refreshProjects(projectsToLoad) {
+function refreshProjects() {
     var projectsElement = document.getElementById("projects");
     while (projectsElement.firstChild) {
         projectsElement.removeChild(projectsElement.firstChild);
     }
 
+    var projectsToLoad = getProjects();
     loadProjects(projectsToLoad);
 }
 
-// Sort Members
-
-
-
-
-
-function sortProjectsByStart() {
-    var projectsCopy = [...projects];
-    projectsCopy.sort((a, b) => {
-        if (a.startMonth > b.startMonth) { return 1; }           
-        if (a.startMonth < b.startMonth) { return -1; }
-
-        if (a.startYear > b.startYear) { return -1; }
-        if (a.startYear < b.startYear) { return 1; }
-    })
-
-    return projectsCopy;
-}
-
-function sortProjectsByTitle() {
-    var projectsCopy = [...projects];
-    projectsCopy.sort((a, b) => a.title.localeCompare(b.title))
-    return projectsCopy;
-}
-
-function sortProjectsByDifficulty() {
-    var projectsCopy = [...projects];
-    projectsCopy.sort((a, b) => b.difficulty - a.difficulty)
-    return projectsCopy;
-}
-
-// Filter Members
-
-
-
-
-
-
-
-// Utility Members
+// Utility members
 
 function getMonthByNumber(number) {
     switch (number) {
